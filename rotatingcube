@@ -1,0 +1,91 @@
+<style>
+  * {
+  	margin: 0;
+    transform-style: preserve-3d;
+  }
+  body { 
+  	perspective: 800px;
+  	width: 100vw;
+    height: 100vh;
+    display:flex;
+    align-content: center;
+    text-align: center;
+    
+  }
+	.face {
+		position: absolute;
+		width: 100px;
+    height: 100px;
+    line-height: 100px;
+
+	}
+  #box{
+  	position:absolute;
+  	width:100px;
+    height:100px;
+    left:45vw;
+    top:45vh;
+  	transform-origin: center center center;
+    background-color:black;
+  }
+  #front {
+  	background-color:rgb(0 255 161 / 70%);
+    transform: translate3d(0,0,50px);
+  }
+  #bottom {
+  	background-color:rgb(0 46 255 / 70%);
+    transform: rotateX(-90deg) translate3d(0,0,50px);
+  }
+  #back {
+  	background-color:rgb(255 153 11 / 70%);
+    transform: rotateY(180deg) translate3d(0,0,50px) ;
+  }
+  #top {
+  	background-color:rgb(251 255 0 / 70%);
+    transform: rotateX(90deg) translate3d(0,0,50px) ;
+  }
+  #right {
+  	background-color:rgb(128 0 255 / 70%);
+    transform: rotateY(90deg) translate3d(0,0,50px) ;
+  }
+  #left {
+  	background-color:rgb(255 0 135 / 70%);
+    transform: rotateY(-90deg) translate3d(0,0,50px) ;
+  }
+</style>
+<body>
+<div id="box">
+<div class="face" id="front">front</div>
+<div class="face" id="top">top</div>
+<div class="face" id="back">back</div>
+<div class="face" id="bottom">bottom</div>
+<div class="face" id="right">right</div>
+<div class="face" id="left">left</div>
+  </div>
+</body>
+<script>
+	const box = document.getElementById("box"),
+  		  keyBinds = {"w":0,"a":0,"s":0,"d":0,"q":0,"e":0,"f":0,"t":0,"g":0,"h":0,"r":0,"y":0},
+        faceStartOffset = [[0,0,50],[0,50,0],[0,0,-50],[0,-50,0],[50,0,0],[-50,0,0]],
+        faceStartAngle = [[0,0,0],[90,0,0],[0,0,0],[-90,0,0],[0,90,0],[0,-90,0]];
+  
+	document.onkeydown = e => Object.keys(keyBinds).includes(e.key) ? keyBinds[e.key] = 1 : 0;
+  document.onkeyup = e => Object.keys(keyBinds).includes(e.key) ? keyBinds[e.key] = 0 : 0;  
+  let curTurnAngles = [0,0,0],
+      curOffset = [0,0,0];
+	setInterval(() => {
+    let netWS = keyBinds.w - keyBinds.s,
+        netAD = keyBinds.a - keyBinds.d,
+        netQE = keyBinds.q - keyBinds.e,
+    		netTG = keyBinds.t - keyBinds.g,
+        netFH = keyBinds.f - keyBinds.h,
+        netRY = keyBinds.r - keyBinds.y;
+    		curOffset[0] += netAD*5;
+    		curOffset[1] += netQE*5;
+    		curOffset[2] += netWS*5;
+    		curTurnAngles[0] += netFH*5;
+    		curTurnAngles[1] += netRY*5;
+    		curTurnAngles[2] += netTG*5;
+        	box.style.transform = "rotate3d(1,0,0," + curTurnAngles[0] + "deg) rotate3d(0,1,0," + curTurnAngles[1] + "deg) rotate3d(0,0,1," + curTurnAngles[2] + "deg) translate3d(" + curOffset[0] + "px," + curOffset[1] + "px," + curOffset[2] + "px)";
+}, 100);
+</script>
