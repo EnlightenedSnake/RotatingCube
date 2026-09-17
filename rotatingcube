@@ -20,7 +20,7 @@
 
 	}
   #box{
-  	position:absolute;
+  	position:fixed;
   	width:100px;
     height:100px;
     left:45vw;
@@ -65,15 +65,14 @@
 </body>
 <script>
 	const box = document.getElementById("box"),
-  		  keyBinds = {"w":0,"a":0,"s":0,"d":0,"q":0,"e":0,"f":0,"t":0,"g":0,"h":0,"r":0,"y":0},
-        faceStartOffset = [[0,0,50],[0,50,0],[0,0,-50],[0,-50,0],[50,0,0],[-50,0,0]],
-        faceStartAngle = [[0,0,0],[90,0,0],[0,0,0],[-90,0,0],[0,90,0],[0,-90,0]];
+  		  keyBinds = {"w":0,"a":0,"s":0,"d":0,"q":0,"e":0,"f":0,"t":0,"g":0,"h":0,"r":0,"y":0};
   
 	document.onkeydown = e => Object.keys(keyBinds).includes(e.key) ? keyBinds[e.key] = 1 : 0;
   document.onkeyup = e => Object.keys(keyBinds).includes(e.key) ? keyBinds[e.key] = 0 : 0;  
   let curTurnAngles = [0,0,0],
       curOffset = [0,0,0];
 	setInterval(() => {
+    		box.style.transform = "translate3d(0,0,0)";
     let netWS = keyBinds.w - keyBinds.s,
         netAD = keyBinds.a - keyBinds.d,
         netQE = keyBinds.q - keyBinds.e,
@@ -86,6 +85,7 @@
     		curTurnAngles[0] += netFH*5;
     		curTurnAngles[1] += netRY*5;
     		curTurnAngles[2] += netTG*5;
-        	box.style.transform = "rotate3d(1,0,0," + curTurnAngles[0] + "deg) rotate3d(0,1,0," + curTurnAngles[1] + "deg) rotate3d(0,0,1," + curTurnAngles[2] + "deg) translate3d(" + curOffset[0] + "px," + curOffset[1] + "px," + curOffset[2] + "px)";
+    		box.parentElement.style.transform = "translate3d(" + curOffset[0] + "px," + curOffset[1] + "px," + curOffset[2] + "px)";
+        box.style.transform = "rotate3d(1,0,0," + curTurnAngles[0] + "deg) rotate3d(0,1,0," + curTurnAngles[1] + "deg) rotate3d(0,0,1," + curTurnAngles[2] + "deg)";
 }, 100);
 </script>
