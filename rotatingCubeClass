@@ -1,0 +1,137 @@
+<style>
+  * {
+  	margin: 0;
+    transform-style: preserve-3d;
+  }
+
+  #world { 
+    perspective: 800px;
+  	width: 100vw;
+    height: 100vh;
+    display:flex;
+    align-content: center;
+    text-align: center;
+    overflow: hidden;
+  }
+  #camera {
+  	position:relative;
+  	width: 100vw;
+    height: 100vh;
+    transform-origin: center center 800px;
+  }
+  #box-wrapper {
+  	position:relative;
+  	width: 100vw;
+    height: 100vh;
+  }
+  .box{
+  	position:fixed;
+  	width:100px;
+    height:100px;
+    left:45vw;
+    top:45vh;
+  	transform-origin: center center center;
+    background-color:black;
+  }
+  .front {
+  	position: absolute;
+  	width: 100px;
+    height: 100px;
+  	background-color:rgb(0 255 161 / 70%);
+    transform: translate3d(-50px,0,50px);
+  }
+  .bottom {
+  	position: absolute;
+  	width: 100px;
+    height: 100px;
+  	background-color:rgb(0 46 255 / 70%);
+    transform: rotateX(-90deg) translate3d(-50px,0,50px);
+  }
+  .back {
+  	position: absolute;
+  	width: 100px;
+    height: 100px;
+  	background-color:rgb(255 153 11 / 70%);
+    transform: rotateY(180deg) translate3d(50px,0,50px) ;
+  }
+  .top {
+  	position: absolute;
+  	width: 100px;
+    height: 100px;
+  	background-color:rgb(251 255 0 / 70%);
+    transform: rotateX(90deg) translate3d(-50px,0,50px) ;
+  }
+  .right {
+  	position: absolute;
+  	width: 100px;
+    height: 100px;
+  	background-color:rgb(128 0 255 / 70%);
+    transform: rotateY(90deg) translate3d(0,0,0) ;
+  }
+  .left {
+  	position: absolute;
+  	width: 100px;
+    height: 100px;
+  	background-color:rgb(255 0 135 / 70%);
+    transform: rotateY(-90deg) translate3d(0,0,100px) ;
+  }
+</style>
+<body>
+<div id="world">
+  <div id="camera">
+    <div id="box-wrapper">
+      <div class="box">
+        <canvas class="front"></canvas>
+        <canvas class="top"></canvas>
+        <canvas class="back"></canvas>
+        <canvas class="bottom"></canvas>
+        <canvas class="right"></canvas>
+        <canvas class="left"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+<script>
+	const box_wrapper = document.getElementById("box-wrapper"),
+  		  keyBinds = {"w":0,"a":0,"s":0,"d":0,"q":0,"e":0,"f":0,"t":0,"g":0,"h":0,"r":0,"y":0,"ArrowLeft":0,"ArrowRight":0};
+
+class Box {
+    box;
+    
+    constructor(xLen,yLen,zLen, midPointCoords, xyzRotationAngles){
+    	  this.box = box_wrapper.children[0].cloneNode(true);
+      this.box.style.transform = "scale3d(" + (xLen/100) + "," + (yLen/100) + "," + (zLen/100) + ") rotate3d(1,0,0," + xyzRotationAngles[0] + "deg) rotate3d(0,1,0," + xyzRotationAngles[1] + "deg) rotate3d(0,0,1," + xyzRotationAngles[2] + "deg) translate3d(" + midPointCoords[0] + "px, " + midPointCoords[1] + "px, " + midPointCoords[2] + "px)";
+  			box_wrapper.appendChild(this.box);
+    }
+  }
+  
+  objs = [new Box(100,100,100,[0,200,0],[90,0,0])];
+  
+	document.onkeydown = e => Object.keys(keyBinds).includes(e.key) ? keyBinds[e.key] = 1 : 0;
+  document.onkeyup = e => Object.keys(keyBinds).includes(e.key) ? keyBinds[e.key] = 0 : 0;  
+  
+  //Delete curCubeAngles and all the keybinds assoiciated with it when done testing
+  let curCubeAngles = [0,0,0],
+      curCamOffset = [0,0,0],
+      curCamAngle = 0;
+	setInterval(() => {
+    let netWS = keyBinds.w - keyBinds.s,
+        netAD = keyBinds.a - keyBinds.d,
+        netQE = keyBinds.q - keyBinds.e,
+    		netTG = keyBinds.t - keyBinds.g,
+        netFH = keyBinds.f - keyBinds.h,
+        netRY = keyBinds.r - keyBinds.y,
+    		netArrow = keyBinds.ArrowRight - keyBinds.ArrowLeft;
+        curCamAngle += netArrow*5;
+    		curCamOffset[0] += netAD*5*Math.cos(curCamAngle*(Math.PI/180))-netWS*5*Math.sin(curCamAngle*(Math.PI/180));
+    		curCamOffset[1] += netQE*5;
+    		curCamOffset[2] += netAD*5*Math.sin(curCamAngle*(Math.PI/180))+netWS*5*Math.cos(curCamAngle*(Math.PI/180));
+    		curCubeAngles[0] += netTG*5;
+    		curCubeAngles[1] += netFH*5;
+    		curCubeAngles[2] += netRY*5;
+    		box_wrapper.style.transform = "translate3d(" + curCamOffset[0] + "px," + curCamOffset[1] + "px," + curCamOffset[2] + "px)";
+        //box_wrapper.children[0].style.transform = "scale3d(1.5,1,1) rotate3d(1,0,0," + curCubeAngles[0] + "deg) rotate3d(0,1,0," + curCubeAngles[1] + "deg) rotate3d(0,0,1," + curCubeAngles[2] + "deg)";
+				box_wrapper.parentElement.style.transform = "rotateY(" + curCamAngle + "deg)";
+  }, 100);
+</script>
