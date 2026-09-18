@@ -24,14 +24,12 @@
   	position:relative;
   	width: 100vw;
     height: 100vh;
-    background-color: blue;
     transform-origin: center center 800px;
   }
   #box-wrapper {
   	position:relative;
   	width: 100vw;
     height: 100vh;
-    background-color: blue;
   }
   #box{
   	position:fixed;
