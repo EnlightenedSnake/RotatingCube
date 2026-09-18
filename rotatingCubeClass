@@ -106,7 +106,7 @@ class Box {
     }
   }
   
-  objs = [new Box(100,100,100,[0,200,0],[90,0,0])];
+  objs = [new Box(1000,1000,1000,[0,0,0],[0,0,0]),new Box(100,100,100,[0,200,0],[90,0,0])];
   
 	document.onkeydown = e => Object.keys(keyBinds).includes(e.key) ? keyBinds[e.key] = 1 : 0;
   document.onkeyup = e => Object.keys(keyBinds).includes(e.key) ? keyBinds[e.key] = 0 : 0;  
@@ -131,7 +131,7 @@ class Box {
     		curCubeAngles[1] += netFH*5;
     		curCubeAngles[2] += netRY*5;
     		box_wrapper.style.transform = "translate3d(" + curCamOffset[0] + "px," + curCamOffset[1] + "px," + curCamOffset[2] + "px)";
-        //box_wrapper.children[0].style.transform = "scale3d(1.5,1,1) rotate3d(1,0,0," + curCubeAngles[0] + "deg) rotate3d(0,1,0," + curCubeAngles[1] + "deg) rotate3d(0,0,1," + curCubeAngles[2] + "deg)";
+        box_wrapper.children[0].style.transform = "scale3d(1.5,1,1) rotate3d(1,0,0," + curCubeAngles[0] + "deg) rotate3d(0,1,0," + curCubeAngles[1] + "deg) rotate3d(0,0,1," + curCubeAngles[2] + "deg)";
 				box_wrapper.parentElement.style.transform = "rotateY(" + curCamAngle + "deg)";
   }, 100);
 </script>
