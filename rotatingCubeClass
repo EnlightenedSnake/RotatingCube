@@ -82,8 +82,8 @@
     <div id="box-wrapper">
       <div class="box">
         <canvas class="front"></canvas>
-        <canvas class="top"></canvas>
         <canvas class="back"></canvas>
+        <canvas class="top"></canvas>
         <canvas class="bottom"></canvas>
         <canvas class="right"></canvas>
         <canvas class="left"></canvas>
@@ -94,15 +94,38 @@
 </body>
 <script>
 	const box_wrapper = document.getElementById("box-wrapper"),
+        tempfrontctx = box_wrapper.children[0].children[0].getContext("2d"),
+        tempbackctx = box_wrapper.children[0].children[1].getContext("2d"),
+        temptopctx = box_wrapper.children[0].children[2].getContext("2d"),
+        tempbottomctx = box_wrapper.children[0].children[3].getContext("2d"),
+        temprightctx = box_wrapper.children[0].children[4].getContext("2d"),
+        templeftctx = box_wrapper.children[0].children[5].getContext("2d"),
   		  keyBinds = {"w":0,"a":0,"s":0,"d":0,"q":0,"e":0,"f":0,"t":0,"g":0,"h":0,"r":0,"y":0,"ArrowLeft":0,"ArrowRight":0};
-
+	
+  		tempfrontctx.fillRect(0,0,200,100);
 class Box {
     box;
+  	frontCanvas;
+  	backCanvas;
+  	topCanvas;
+  	bottomCanvas;
+  	rightCanvas;
+  	leftCanvas;
     
     constructor(xLen,yLen,zLen, midPointCoords, xyzRotationAngles){
-    	  this.box = box_wrapper.children[0].cloneNode(true);
+    	this.box = box_wrapper.children[0].cloneNode(true);
       this.box.style.transform = "scale3d(" + (xLen/100) + "," + (yLen/100) + "," + (zLen/100) + ") rotate3d(1,0,0," + xyzRotationAngles[0] + "deg) rotate3d(0,1,0," + xyzRotationAngles[1] + "deg) rotate3d(0,0,1," + xyzRotationAngles[2] + "deg) translate3d(" + midPointCoords[0] + "px, " + midPointCoords[1] + "px, " + midPointCoords[2] + "px)";
-  			box_wrapper.appendChild(this.box);
+  		box_wrapper.appendChild(this.box);
+      this.frontCanvas = this.box.children[0].getContext("2d");
+      this.backCanvas = this.box.children[1].getContext("2d");
+      this.topCanvas = this.box.children[2].getContext("2d");
+      this.bottomCanvas = this.box.children[3].getContext("2d");
+      this.rightCanvas = this.box.children[4].getContext("2d");
+      this.leftCanvas = this.box.children[5].getContext("2d");
+    }
+  
+  	cloneCanvasToScale(){
+      this.frontCanvas
     }
   }
   
@@ -131,7 +154,7 @@ class Box {
     		curCubeAngles[1] += netFH*5;
     		curCubeAngles[2] += netRY*5;
     		box_wrapper.style.transform = "translate3d(" + curCamOffset[0] + "px," + curCamOffset[1] + "px," + curCamOffset[2] + "px)";
-        box_wrapper.children[0].style.transform = "scale3d(1.5,1,1) rotate3d(1,0,0," + curCubeAngles[0] + "deg) rotate3d(0,1,0," + curCubeAngles[1] + "deg) rotate3d(0,0,1," + curCubeAngles[2] + "deg)";
+        box_wrapper.children[0].style.transform = "scale3d(1,1,1) rotate3d(1,0,0," + curCubeAngles[0] + "deg) rotate3d(0,1,0," + curCubeAngles[1] + "deg) rotate3d(0,0,1," + curCubeAngles[2] + "deg)";
 				box_wrapper.parentElement.style.transform = "rotateY(" + curCamAngle + "deg)";
   }, 100);
 </script>
