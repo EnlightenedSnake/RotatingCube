@@ -103,8 +103,7 @@
   		  keyBinds = {"w":0,"a":0,"s":0,"d":0,"q":0,"e":0,"f":0,"t":0,"g":0,"h":0,"r":0,"y":0,"ArrowLeft":0,"ArrowRight":0};
 			
   
-  		tempfrontctx.width = tempfrontctx.height = 100;
-  		console.log(tempfrontctx.width, tempfrontctx.height);
+  		box_wrapper.children[0].children[0].width = box_wrapper.children[0].children[0].height = 100;
   		tempfrontctx.fillRect(25,25,50,50);
 class Box {
   	xLen;
@@ -123,9 +122,9 @@ class Box {
       for(let i = 0; i < 6; ++i){
       	this.faceCanvases[i] = this.box.children[i].getContext("2d");
       }
-      this.faceCanvases[0].width = this.faceCanvases[1].width = this.faceCanvases[2].width = this.faceCanvases[3].width = xLen;
-      this.faceCanvases[0].height = this.faceCanvases[1].height = this.faceCanvases[4].height = this.faceCanvases[5].height = yLen;
-      this.faceCanvases[2].height = this.faceCanvases[3].height = this.faceCanvases[4].width = this.faceCanvases[5].width = zLen;
+      this.box.children[0].width = this.box.children[1].width = this.box.children[2].width = this.box.children[3].width = xLen;
+      this.box.children[0].height = this.box.children[1].height = this.box.children[4].height = this.box.children[5].height = yLen;
+      this.box.children[2].height = this.box.children[3].height = this.box.children[4].width = this.box.children[5].width = zLen;
     	this.cloneCanvasToScale();
     }
   
@@ -148,7 +147,7 @@ class Box {
       }
     }
 	}
-  objs = [/*new Box(1000,1000,1000,[0,0,0],[0,0,0]),*/new Box(100,100,100,[0,200,0],[90,0,0])];
+  objs = [new Box(1000,1000,1000,[0,0,0],[0,0,0]),new Box(100,100,100,[0,200,0],[90,0,0])];
   
 	document.onkeydown = e => Object.keys(keyBinds).includes(e.key) ? keyBinds[e.key] = 1 : 0;
   document.onkeyup = e => Object.keys(keyBinds).includes(e.key) ? keyBinds[e.key] = 0 : 0;  
