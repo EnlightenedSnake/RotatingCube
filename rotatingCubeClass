@@ -101,35 +101,54 @@
         temprightctx = box_wrapper.children[0].children[4].getContext("2d"),
         templeftctx = box_wrapper.children[0].children[5].getContext("2d"),
   		  keyBinds = {"w":0,"a":0,"s":0,"d":0,"q":0,"e":0,"f":0,"t":0,"g":0,"h":0,"r":0,"y":0,"ArrowLeft":0,"ArrowRight":0};
-	
-  		tempfrontctx.fillRect(0,0,200,100);
+			
+  
+  		tempfrontctx.width = tempfrontctx.height = 100;
+  		console.log(tempfrontctx.width, tempfrontctx.height);
+  		tempfrontctx.fillRect(25,25,50,50);
 class Box {
+  	xLen;
+  	yLen;
+  	zLen;
     box;
-  	frontCanvas;
-  	backCanvas;
-  	topCanvas;
-  	bottomCanvas;
-  	rightCanvas;
-  	leftCanvas;
+  	faceCanvases = [];//frontCanvas, backCanvas, topCanvas, bottomCanvas, rightCanvas, leftCanvas
     
-    constructor(xLen,yLen,zLen, midPointCoords, xyzRotationAngles){
+    constructor(xLen,yLen, zLen, midPointCoords, xyzRotationAngles){
+      this.xLen = xLen;
+      this.yLen = yLen;
+      this.zLen = zLen;
     	this.box = box_wrapper.children[0].cloneNode(true);
       this.box.style.transform = "scale3d(" + (xLen/100) + "," + (yLen/100) + "," + (zLen/100) + ") rotate3d(1,0,0," + xyzRotationAngles[0] + "deg) rotate3d(0,1,0," + xyzRotationAngles[1] + "deg) rotate3d(0,0,1," + xyzRotationAngles[2] + "deg) translate3d(" + midPointCoords[0] + "px, " + midPointCoords[1] + "px, " + midPointCoords[2] + "px)";
   		box_wrapper.appendChild(this.box);
-      this.frontCanvas = this.box.children[0].getContext("2d");
-      this.backCanvas = this.box.children[1].getContext("2d");
-      this.topCanvas = this.box.children[2].getContext("2d");
-      this.bottomCanvas = this.box.children[3].getContext("2d");
-      this.rightCanvas = this.box.children[4].getContext("2d");
-      this.leftCanvas = this.box.children[5].getContext("2d");
+      for(let i = 0; i < 6; ++i){
+      	this.faceCanvases[i] = this.box.children[i].getContext("2d");
+      }
+      this.faceCanvases[0].width = this.faceCanvases[1].width = this.faceCanvases[2].width = this.faceCanvases[3].width = xLen;
+      this.faceCanvases[0].height = this.faceCanvases[1].height = this.faceCanvases[4].height = this.faceCanvases[5].height = yLen;
+      this.faceCanvases[2].height = this.faceCanvases[3].height = this.faceCanvases[4].width = this.faceCanvases[5].width = zLen;
+    	this.cloneCanvasToScale();
     }
   
   	cloneCanvasToScale(){
-      this.frontCanvas
+      for(let numWidth = 0; numWidth < Math.ceil(this.xLen/100); ++numWidth){
+        for(let numHeightFrontBack = 0; numHeightFrontBack < Math.ceil(this.yLen/100); ++numHeightFrontBack){
+          this.faceCanvases[0].drawImage(box_wrapper.children[0].children[0],100*numWidth,100*numHeightFrontBack);
+          this.faceCanvases[1].drawImage(box_wrapper.children[0].children[0],100*numWidth,100*numHeightFrontBack);
+        }
+        for(let numHeightTopBottom = 0; numHeightTopBottom < Math.ceil(this.zLen/100); ++numHeightTopBottom){
+					this.faceCanvases[2].drawImage(box_wrapper.children[0].children[0],100*numWidth,100*numHeightTopBottom);
+          this.faceCanvases[3].drawImage(box_wrapper.children[0].children[0],100*numWidth,100*numHeightTopBottom);
+        }
+      }
+      for(let numWidthRightLeft = 0; numWidthRightLeft < Math.ceil(this.zLen/100); ++numWidthRightLeft){
+        for(let numHeightRightLeft = 0; numHeightRightLeft < Math.ceil(this.yLen/100); ++numHeightRightLeft){
+					this.faceCanvases[2].drawImage(box_wrapper.children[0].children[0],100*numWidthRightLeft,100*numHeightRightLeft);
+        	this.faceCanvases[3].drawImage(box_wrapper.children[0].children[0],100*numWidthRightLeft,100*numHeightRightLeft);
+        }
+      }
     }
-  }
-  
-  objs = [new Box(1000,1000,1000,[0,0,0],[0,0,0]),new Box(100,100,100,[0,200,0],[90,0,0])];
+	}
+  objs = [/*new Box(1000,1000,1000,[0,0,0],[0,0,0]),*/new Box(100,100,100,[0,200,0],[90,0,0])];
   
 	document.onkeydown = e => Object.keys(keyBinds).includes(e.key) ? keyBinds[e.key] = 1 : 0;
   document.onkeyup = e => Object.keys(keyBinds).includes(e.key) ? keyBinds[e.key] = 0 : 0;  
