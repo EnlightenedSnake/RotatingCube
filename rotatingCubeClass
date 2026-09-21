@@ -103,6 +103,8 @@
   		  keyBinds = {"w":0,"a":0,"s":0,"d":0,"q":0,"e":0,"f":0,"t":0,"g":0,"h":0,"r":0,"y":0,"ArrowLeft":0,"ArrowRight":0};
 			
   
+  //Setting default face canvases
+  	//Front
   		box_wrapper.children[0].children[0].width = box_wrapper.children[0].children[0].height = 100;
   		tempfrontctx.fillRect(25,25,50,50);
 class Box {
@@ -141,8 +143,8 @@ class Box {
       }
       for(let numWidthRightLeft = 0; numWidthRightLeft < Math.ceil(this.zLen/100); ++numWidthRightLeft){
         for(let numHeightRightLeft = 0; numHeightRightLeft < Math.ceil(this.yLen/100); ++numHeightRightLeft){
-					this.faceCanvases[2].drawImage(box_wrapper.children[0].children[0],100*numWidthRightLeft,100*numHeightRightLeft);
-        	this.faceCanvases[3].drawImage(box_wrapper.children[0].children[0],100*numWidthRightLeft,100*numHeightRightLeft);
+					this.faceCanvases[4].drawImage(box_wrapper.children[0].children[0],100*numWidthRightLeft,100*numHeightRightLeft);
+        	this.faceCanvases[5].drawImage(box_wrapper.children[0].children[0],100*numWidthRightLeft,100*numHeightRightLeft);
         }
       }
     }
