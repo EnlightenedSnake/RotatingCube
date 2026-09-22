@@ -119,7 +119,7 @@ class Box {
       this.yLen = yLen;
       this.zLen = zLen;
     	this.box = box_wrapper.children[0].cloneNode(true);
-      this.box.style.transform = "scale3d(" + (xLen/100) + "," + (yLen/100) + "," + (zLen/100) + ") rotate3d(1,0,0," + xyzRotationAngles[0] + "deg) rotate3d(0,1,0," + xyzRotationAngles[1] + "deg) rotate3d(0,0,1," + xyzRotationAngles[2] + "deg) translate3d(" + midPointCoords[0] + "px, " + midPointCoords[1] + "px, " + midPointCoords[2] + "px)";
+      this.box.style.transform = "rotate3d(1,0,0," + xyzRotationAngles[0] + "deg) rotate3d(0,1,0," + xyzRotationAngles[1] + "deg) rotate3d(0,0,1," + xyzRotationAngles[2] + "deg) translate3d(" + midPointCoords[0] + "px, " + midPointCoords[1] + "px, " + midPointCoords[2] + "px) scale3d(" + (xLen/100) + "," + (yLen/100) + "," + (zLen/100) + ")";
   		box_wrapper.appendChild(this.box);
       for(let i = 0; i < 6; ++i){
       	this.faceCanvases[i] = this.box.children[i].getContext("2d");
@@ -149,7 +149,7 @@ class Box {
       }
     }
 	}
-  objs = [new Box(1000,1000,1000,[0,0,0],[0,0,0]),new Box(100,100,100,[0,200,0],[90,0,0])];
+  objs = [new Box(1000,1000,1000,[0,0,800],[0,00,0]),new Box(100,100,100,[0,0,0],[90,0,0])];
   
 	document.onkeydown = e => Object.keys(keyBinds).includes(e.key) ? keyBinds[e.key] = 1 : 0;
   document.onkeyup = e => Object.keys(keyBinds).includes(e.key) ? keyBinds[e.key] = 0 : 0;  
@@ -157,7 +157,9 @@ class Box {
   //Delete curCubeAngles and all the keybinds assoiciated with it when done testing
   let curCubeAngles = [0,0,0],
       curCamOffset = [0,0,0],
-      curCamAngle = 0;
+      curCamAngle = 0,
+      turnSpeed = 5,
+      moveSpeed = 5;
 	setInterval(() => {
     let netWS = keyBinds.w - keyBinds.s,
         netAD = keyBinds.a - keyBinds.d,
@@ -166,10 +168,10 @@ class Box {
         netFH = keyBinds.f - keyBinds.h,
         netRY = keyBinds.r - keyBinds.y,
     		netArrow = keyBinds.ArrowRight - keyBinds.ArrowLeft;
-        curCamAngle += netArrow*5;
-    		curCamOffset[0] += netAD*5*Math.cos(curCamAngle*(Math.PI/180))-netWS*5*Math.sin(curCamAngle*(Math.PI/180));
-    		curCamOffset[1] += netQE*5;
-    		curCamOffset[2] += netAD*5*Math.sin(curCamAngle*(Math.PI/180))+netWS*5*Math.cos(curCamAngle*(Math.PI/180));
+        curCamAngle += netArrow*turnSpeed;
+    		curCamOffset[0] += netAD*moveSpeed*Math.cos(curCamAngle*(Math.PI/180))-netWS*5*Math.sin(curCamAngle*(Math.PI/180));
+    		curCamOffset[1] += netQE*moveSpeed;
+    		curCamOffset[2] += netAD*moveSpeed*Math.sin(curCamAngle*(Math.PI/180))+netWS*5*Math.cos(curCamAngle*(Math.PI/180));
     		curCubeAngles[0] += netTG*5;
     		curCubeAngles[1] += netFH*5;
     		curCubeAngles[2] += netRY*5;
