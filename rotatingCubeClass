@@ -18,6 +18,7 @@
   	width: 100vw;
     height: 100vh;
     transform-origin: center center 800px;
+    transition: rotateX 0.1s, rotateY 0.1s;
   }
   #box-wrapper {
   	position:relative;
@@ -100,7 +101,7 @@
         tempbottomctx = box_wrapper.children[0].children[3].getContext("2d"),
         temprightctx = box_wrapper.children[0].children[4].getContext("2d"),
         templeftctx = box_wrapper.children[0].children[5].getContext("2d"),
-  		  keyBinds = {"w":0,"a":0,"s":0,"d":0,"q":0,"e":0,"f":0,"t":0,"g":0,"h":0,"r":0,"y":0,"ArrowLeft":0,"ArrowRight":0};
+  		  keyBinds = {"w":0,"a":0,"s":0,"d":0,"q":0,"e":0,"f":0,"t":0,"g":0,"h":0,"r":0,"y":0};
 			
   
   //Setting default face canvases
@@ -206,11 +207,26 @@ class Sector {
   sectors = [new Sector([[-50,-50],[50,-50],[50,50],[-50,50]],-50, 100,[1,0],[])];
 	document.onkeydown = e => Object.keys(keyBinds).includes(e.key) ? keyBinds[e.key] = 1 : 0;
   document.onkeyup = e => Object.keys(keyBinds).includes(e.key) ? keyBinds[e.key] = 0 : 0;  
-  
+  document.onmousedown = e => {
+    curMousePos = [e.clientX, e.clientY];
+		mouseDown = true;
+  }
+  document.onmousemove = e => {
+  	if(mouseDown){
+    	curCamAngleDiff = [curCamAngleDiff[0]-(camSensitivity*180*(e.clientX - curMousePos[0])/window.innerWidth),curCamAngleDiff[1]+(camSensitivity*180*(e.clientY - curMousePos[1])/window.innerHeight)];
+    	curMousePos = [e.clientX, e.clientY];
+    }
+  }
+  document.onmouseup = () => mouseDown = false;
+  document.onmouseleave = () => mouseDown = false;
   //Delete curCubeAngles and all the keybinds assoiciated with it when done testing
   let curCubeAngles = [0,0,0],
       curCamPos = [0,0,0],
-      curCamAngle = 0,
+      curCamAngle = [0,0],
+      curMousePos = [0,0],
+      mouseDown = false,
+      curCamAngleDiff = [0,0],
+      camSensitivity = 0.5,
       curSector = sectors[0],
       turnSpeed = 5,
       moveSpeed = 5;
@@ -220,15 +236,17 @@ class Sector {
         netQE = keyBinds.q - keyBinds.e,
     		netTG = keyBinds.t - keyBinds.g,
         netFH = keyBinds.f - keyBinds.h,
-        netRY = keyBinds.r - keyBinds.y,
-    		netArrow = keyBinds.ArrowRight - keyBinds.ArrowLeft;
-        curCamAngle += netArrow*turnSpeed;
-    		move(netAD*moveSpeed*Math.cos(curCamAngle*(Math.PI/180))-netWS*5*Math.sin(curCamAngle*(Math.PI/180)),netQE*moveSpeed,netAD*moveSpeed*Math.sin(curCamAngle*(Math.PI/180))+netWS*5*Math.cos(curCamAngle*(Math.PI/180)));
+        netRY = keyBinds.r - keyBinds.y;
+    		move(netAD*moveSpeed*Math.cos(curCamAngle[0]*(Math.PI/180))-netWS*5*Math.sin(curCamAngle[0]*(Math.PI/180)),netQE*moveSpeed,netAD*moveSpeed*Math.sin(curCamAngle[1]*(Math.PI/180))+netWS*5*Math.cos(curCamAngle[1]*(Math.PI/180)));
+    		if(mouseDown){
+          curCamAngle = [curCamAngle[0]+curCamAngleDiff[0], curCamAngle[1]+curCamAngleDiff[1]];
+      		box_wrapper.parentElement.style.transform = "rotateY(" + curCamAngle[0] + "deg) rotateX(" + curCamAngle[1] + "deg)";
+      		curCamAngleDiff = [0,0];
+        }
     		curCubeAngles[0] += netTG*5;
     		curCubeAngles[1] += netFH*5;
     		curCubeAngles[2] += netRY*5;
     		box_wrapper.style.transform = "translate3d(" + curCamPos[0] + "px," + curCamPos[1] + "px," + curCamPos[2] + "px)";
         box_wrapper.children[0].style.transform = "scale3d(1,1,1) rotate3d(1,0,0," + curCubeAngles[0] + "deg) rotate3d(0,1,0," + curCubeAngles[1] + "deg) rotate3d(0,0,1," + curCubeAngles[2] + "deg)";
-				box_wrapper.parentElement.style.transform = "rotateY(" + curCamAngle + "deg)";
   }, 100);
 </script>
