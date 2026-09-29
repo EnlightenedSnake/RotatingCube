@@ -213,7 +213,11 @@ class Sector {
   }
   document.onmousemove = e => {
   	if(mouseDown){
-    	curCamAngleDiff = [curCamAngleDiff[0]-(camSensitivity*180*(e.clientX - curMousePos[0])/window.innerWidth),curCamAngleDiff[1]+(camSensitivity*180*(e.clientY - curMousePos[1])/window.innerHeight)];
+	  //Broken
+      //curCamAngleDiff[0] = curCamAngleDiff[0]+(camSensitivity*180*((e.clientX - curMousePos[0])/window.innerWidth));
+    	curCamAngleDiff[0] = curCamAngleDiff[0]-(camSensitivity*180*((((e.clientX - curMousePos[0])/window.innerWidth)*Math.cos(curCamAngle[1]*(Math.PI/180)))-(((e.clientY - curMousePos[1])/window.innerHeight)*Math.sin(curCamAngle[1]*(Math.PI/180)))));
+      //curCamAngleDiff[1] = curCamAngleDiff[1]+(camSensitivity*180*((e.clientY - curMousePos[1])/window.innerHeight));
+      curCamAngleDiff[1] = curCamAngleDiff[1]-(camSensitivity*180*(-(((e.clientY - curMousePos[1])/window.innerHeight)*Math.cos(curCamAngle[0]*(Math.PI/180)))+(((e.clientX - curMousePos[0])/window.innerWidth)*Math.sin(curCamAngle[0]*(Math.PI/180)))));
     	curMousePos = [e.clientX, e.clientY];
     }
   }
@@ -240,7 +244,7 @@ class Sector {
     		move(netAD*moveSpeed*Math.cos(curCamAngle[0]*(Math.PI/180))-netWS*5*Math.sin(curCamAngle[0]*(Math.PI/180)),netQE*moveSpeed,netAD*moveSpeed*Math.sin(curCamAngle[0]*(Math.PI/180))+netWS*5*Math.cos(curCamAngle[0]*(Math.PI/180)));
     		if(mouseDown){
           curCamAngle = [curCamAngle[0]+curCamAngleDiff[0], curCamAngle[1]+curCamAngleDiff[1]];
-      		box_wrapper.parentElement.style.transform = "rotateY(" + curCamAngle[0] + "deg) rotateX(" + curCamAngle[1] + "deg)";
+      		box_wrapper.parentElement.style.transform = "rotateX(" + curCamAngle[1] + "deg) rotateY(" + curCamAngle[0] + "deg)";
       		curCamAngleDiff = [0,0];
         }
     		curCubeAngles[0] += netTG*5;
