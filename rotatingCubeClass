@@ -237,7 +237,7 @@ class Sector {
     		netTG = keyBinds.t - keyBinds.g,
         netFH = keyBinds.f - keyBinds.h,
         netRY = keyBinds.r - keyBinds.y;
-    		move(netAD*moveSpeed*Math.cos(curCamAngle[0]*(Math.PI/180))-netWS*5*Math.sin(curCamAngle[0]*(Math.PI/180)),netQE*moveSpeed,netAD*moveSpeed*Math.sin(curCamAngle[1]*(Math.PI/180))+netWS*5*Math.cos(curCamAngle[1]*(Math.PI/180)));
+    		move(netAD*moveSpeed*Math.cos(curCamAngle[0]*(Math.PI/180))-netWS*5*Math.sin(curCamAngle[0]*(Math.PI/180)),netQE*moveSpeed,netAD*moveSpeed*Math.sin(curCamAngle[0]*(Math.PI/180))+netWS*5*Math.cos(curCamAngle[0]*(Math.PI/180)));
     		if(mouseDown){
           curCamAngle = [curCamAngle[0]+curCamAngleDiff[0], curCamAngle[1]+curCamAngleDiff[1]];
       		box_wrapper.parentElement.style.transform = "rotateY(" + curCamAngle[0] + "deg) rotateX(" + curCamAngle[1] + "deg)";
