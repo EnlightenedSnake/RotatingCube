@@ -213,7 +213,7 @@ class Sector {
   }
   document.onmousemove = e => {
   	if(mouseDown){
-    	curCamAngleDiff[0] = curCamAngleDiff[0]-(camSensitivity*180*((((e.clientX - curMousePos[0])/window.innerWidth)*Math.cos(curCamAngle[1]*(Math.PI/180)))-(((e.clientY - curMousePos[1])/window.innerHeight)*Math.sin(curCamAngle[1]*(Math.PI/180)))));
+    	curCamAngleDiff[0] = curCamAngleDiff[0]-(camSensitivity*180*(((e.clientX - curMousePos[0])/window.innerWidth)*Math.cos(curCamAngle[1]*(Math.PI/180))));
       curCamAngleDiff[1] = curCamAngleDiff[1]+(camSensitivity*180*((e.clientY - curMousePos[1])/window.innerHeight));
     	curMousePos = [e.clientX, e.clientY];
     }
