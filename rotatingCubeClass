@@ -204,7 +204,7 @@ class Sector {
     }
   }
   objs = [new Box(1000,1000,1000,[0,0,800],[0,0,0]),new Box(100,100,100,[0,0,0],[90,0,0])];
-  sectors = [new Sector([[-50,-50],[50,-50],[50,50],[-50,50]],-50, 100,[1,0],[])];
+  sectors = [new Sector([[-500,-500],[500,-500],[500,500],[-500,500]],-500, 1000,[1,0],[])];
 	document.onkeydown = e => Object.keys(keyBinds).includes(e.key) ? keyBinds[e.key] = 1 : 0;
   document.onkeyup = e => Object.keys(keyBinds).includes(e.key) ? keyBinds[e.key] = 0 : 0;  
   document.onmousedown = e => {
@@ -230,7 +230,7 @@ class Sector {
       camSensitivity = 0.5,
       curSector = sectors[0],
       turnSpeed = 5,
-      moveSpeed = 5;
+      moveSpeed = 0.5;
 	setInterval(() => {
     let netWS = keyBinds.w - keyBinds.s,
         netAD = keyBinds.a - keyBinds.d,
@@ -238,7 +238,7 @@ class Sector {
     		netTG = keyBinds.t - keyBinds.g,
         netFH = keyBinds.f - keyBinds.h,
         netRY = keyBinds.r - keyBinds.y;
-    		move(netAD*moveSpeed*Math.cos(curCamAngle[0]*(Math.PI/180))-netWS*5*Math.sin(curCamAngle[0]*(Math.PI/180)),netQE*moveSpeed,netAD*moveSpeed*Math.sin(curCamAngle[0]*(Math.PI/180))+netWS*5*Math.cos(curCamAngle[0]*(Math.PI/180)));
+    		move(netAD*moveSpeed*Math.cos(curCamAngle[0]*(Math.PI/180))-netWS*moveSpeed*Math.sin(curCamAngle[0]*(Math.PI/180)),netQE*moveSpeed,netAD*moveSpeed*Math.sin(curCamAngle[0]*(Math.PI/180))+netWS*moveSpeed*Math.cos(curCamAngle[0]*(Math.PI/180)));
     		if(mouseDown){
           curCamAngle = [curCamAngle[0]+curCamAngleDiff[0], Math.max(-90,Math.min(90,curCamAngle[1]+curCamAngleDiff[1]))];
       		box_wrapper.parentElement.style.transform = "rotateX(" + curCamAngle[1] + "deg) rotateY(" + curCamAngle[0] + "deg)";
@@ -249,5 +249,5 @@ class Sector {
     		curCubeAngles[2] += netRY*5;
     		box_wrapper.style.transform = "translate3d(" + curCamPos[0] + "px," + curCamPos[1] + "px," + curCamPos[2] + "px)";
         box_wrapper.children[0].style.transform = "scale3d(1,1,1) rotate3d(1,0,0," + curCubeAngles[0] + "deg) rotate3d(0,1,0," + curCubeAngles[1] + "deg) rotate3d(0,0,1," + curCubeAngles[2] + "deg)";
-  }, 100);
+  }, 10);
 </script>
